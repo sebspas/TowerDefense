@@ -1,25 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EAgentState
+enum ETowerState
 {
     Idle,
-    Move,
     Attack
 }
 
-public class Agent : MonoBehaviour
-{    
-    private MovementComponent _movementComponent;
-    private AttackComponent _attackComponent;
+public class Tower : MonoBehaviour
+{
     private TargetFinder _targetFinder;
-    private EAgentState _currentAgentState = EAgentState.Idle;
     private Func<GameObject, GameObject, bool> findTargetCondition;
+    private AttackComponent _attackComponent;
+    private ETowerState _currentAgentState = ETowerState.Idle;
 
     private void Start()
     {
-        _movementComponent = GetComponent<MovementComponent>();
         _attackComponent = GetComponent<AttackComponent>();
         _targetFinder = GetComponent<TargetFinder>();
 
@@ -31,13 +29,10 @@ public class Agent : MonoBehaviour
             {
                 selectedDistance = Vector3.Distance(selectedTarget.transform.position, transform.position);
             }
-
-            if (newDistance <= selectedDistance && newDistance <= _movementComponent.DistanceToCurrentTarget)
+            
+            if (newDistance <= _attackComponent.attackRange && newDistance <= selectedDistance)
             {
-                if (_movementComponent.CanNavigateTo(newCandidate.transform.position))
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         };
@@ -47,7 +42,6 @@ public class Agent : MonoBehaviour
     {
         if (!_targetFinder.FindNewTarget(findTargetCondition)) return;
 
-        _movementComponent.SetDestination(_targetFinder.Target);
         _attackComponent.Target = _targetFinder.Target;
     }
 
@@ -55,41 +49,24 @@ public class Agent : MonoBehaviour
     {
         UpdateTarget();
 
-        // If no target go back to idle
-        if (!_targetFinder.Target)
-        {
-            _currentAgentState = EAgentState.Idle;
-        }
-
         switch (_currentAgentState)
         {
-            case EAgentState.Idle:                
+            case ETowerState.Idle:                
                 if (_targetFinder.Target)
                 {
-                    _currentAgentState = EAgentState.Move;                
+                    _currentAgentState = ETowerState.Attack;
                 }
                 break;
-            case EAgentState.Move:
-                if (_attackComponent.IsTargetInRange(_targetFinder.Target))
-                {
-                    _currentAgentState = EAgentState.Attack;
-                    _movementComponent.StopNavigation();
-                }
-                else
-                {
-                    _movementComponent.OnUpdate();
-                } 
-                break;
-            case EAgentState.Attack:
+            case ETowerState.Attack:
                 if (_attackComponent.IsTargetInRange(_targetFinder.Target))
                 {
                     _attackComponent.OnUpdate();
                 }
                 else
                 {
-                    _currentAgentState = EAgentState.Move;                   
+                    _currentAgentState = ETowerState.Idle;                
                 }
                 break;
-        }        
+        }
     }
 }

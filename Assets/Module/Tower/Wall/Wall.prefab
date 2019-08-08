@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1895079743771046944}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.87, z: 19.9}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 7089274181796711726}
   - {fileID: 5010780857933315033}
@@ -90,9 +90,9 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895079743771046944}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5000001
+  m_Radius: 4
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -110,7 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max: 1000
   current: 1000
-  attackOffset: {x: 3, y: 0, z: 0}
+  attackOffset: {x: 4, y: 0, z: 0}
 --- !u!1001 &1717337207710572247
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -118,6 +118,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3618234985991806158}
     m_Modifications:
+    - target: {fileID: 5934877563759846669, guid: 67335cb81ab16c445828a0664585034f,
+        type: 3}
+      propertyPath: m_Name
+      value: Canvas
+      objectReference: {fileID: 0}
     - target: {fileID: 5934877563759846670, guid: 67335cb81ab16c445828a0664585034f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -223,11 +228,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 5934877563759846669, guid: 67335cb81ab16c445828a0664585034f,
-        type: 3}
-      propertyPath: m_Name
-      value: Canvas
-      objectReference: {fileID: 0}
     - target: {fileID: 9000673262406132060, guid: 67335cb81ab16c445828a0664585034f,
         type: 3}
       propertyPath: healthComponent
@@ -248,6 +248,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3618234985991806158}
     m_Modifications:
+    - target: {fileID: 1649466394728511065, guid: 8d87744d538dbdc41a4cbd8e6c70df59,
+        type: 3}
+      propertyPath: m_Name
+      value: ForceField
+      objectReference: {fileID: 0}
+    - target: {fileID: 1649466394728511065, guid: 8d87744d538dbdc41a4cbd8e6c70df59,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1649466394728511045, guid: 8d87744d538dbdc41a4cbd8e6c70df59,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -317,16 +327,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1649466394728511065, guid: 8d87744d538dbdc41a4cbd8e6c70df59,
-        type: 3}
-      propertyPath: m_Name
-      value: ForceField
-      objectReference: {fileID: 0}
-    - target: {fileID: 1649466394728511065, guid: 8d87744d538dbdc41a4cbd8e6c70df59,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d87744d538dbdc41a4cbd8e6c70df59, type: 3}

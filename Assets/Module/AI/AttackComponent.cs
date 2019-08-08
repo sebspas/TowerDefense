@@ -2,24 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Agent))]
-public class AgentAttackComponent : AgentComponent
+public class AttackComponent : MonoBehaviour
 {
     public float attackRange = 2.0f;
     public float attackDelay = 1.0f;
     public List<IHealthModifier> attackEffect = new List<IHealthModifier>();
 
+    private GameObject _target;
+
+    public GameObject Target
+    {
+        get => _target;
+        set => _target = value;
+    }
+
     private float _elapsedTime = 0.0f;
 
-    public bool IsTargetInRange()
+    public bool IsTargetInRange(GameObject target)
     {
-        HealthComponent targetHealthComponent = _owner.Target.GetComponent<HealthComponent>();
-        return Vector3.Distance(_owner.Target.transform.position - targetHealthComponent.attackOffset, transform.position) <= attackRange;
+        if (!target) return false;
+
+        HealthComponent targetHealthComponent = target.GetComponent<HealthComponent>();     
+        return Vector3.Distance(target.transform.position - targetHealthComponent.attackOffset, transform.position) <= attackRange;
     }
 
     public void AttackTarget()
     {
-        HealthComponent targetHealthComponent = _owner.Target.GetComponent<HealthComponent>();
+        HealthComponent targetHealthComponent = _target.GetComponent<HealthComponent>();
         if (!targetHealthComponent)
         {
             Debug.Log("Trying to attack a target without a healthComponent.");
@@ -31,18 +40,13 @@ public class AgentAttackComponent : AgentComponent
         }
     }
 
-    void Start()
-    {
-        Initialize();
-    }
-
     public void OnUpdate()
     {
-        if (_owner.Target)
+        if (_target)
         {
             _elapsedTime += Time.deltaTime;
 
-            if (_elapsedTime >= attackDelay && IsTargetInRange())
+            if (_elapsedTime >= attackDelay)
             {
                 AttackTarget();
                 _elapsedTime = 0.0f;

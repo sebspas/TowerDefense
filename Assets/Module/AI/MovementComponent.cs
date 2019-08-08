@@ -2,7 +2,7 @@
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class AgentMovementComponent : AgentComponent
+public class MovementComponent : MonoBehaviour
 {
     public float delayToReCalculatePath = 1.0f;
     
@@ -11,14 +11,16 @@ public class AgentMovementComponent : AgentComponent
     private float _distanceToCurrentTarget = float.MaxValue;
     private NavMeshAgent _navMeshAgent;
     private float _elapsedTimeToRecalculatePath = 0.0f;
+    private GameObject _target;
 
-    public void SetDestination(Vector3 newDestination)
+    public void SetDestination(GameObject target)
     {
+        _target = target;
+        HealthComponent targetHealthComponent = target.GetComponent<HealthComponent>();
 
-        HealthComponent targetHealthComponent = _owner.Target.GetComponent<HealthComponent>();
-
-        _navMeshAgent.SetDestination(newDestination - targetHealthComponent.attackOffset);
-        _distanceToCurrentTarget = Vector3.Distance(transform.position, newDestination);
+        Vector3 destination = target.transform.position - targetHealthComponent.attackOffset;
+        _navMeshAgent.SetDestination(destination);
+        _distanceToCurrentTarget = Vector3.Distance(transform.position, destination);
         _navMeshAgent.isStopped = false;
     }
 
@@ -37,20 +39,16 @@ public class AgentMovementComponent : AgentComponent
 
     public void OnUpdate()
     {
-        if (_owner.Target)
+        _elapsedTimeToRecalculatePath += Time.deltaTime;
+        if (_elapsedTimeToRecalculatePath >= delayToReCalculatePath)
         {
-            _elapsedTimeToRecalculatePath += Time.deltaTime;
-            if (_elapsedTimeToRecalculatePath >= delayToReCalculatePath)
-            {
-                _elapsedTimeToRecalculatePath = 0.0f;
-                SetDestination(_owner.Target.transform.position);
-            }
+            _elapsedTimeToRecalculatePath = 0.0f;
+            SetDestination(_target);
         }
     }
 
     private void Start()
     {
-        Initialize();
         _navMeshAgent = GetComponent<NavMeshAgent>();
     }
 }

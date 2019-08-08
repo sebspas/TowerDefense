@@ -20,7 +20,7 @@ public class HealthComponent : MonoBehaviour
     void Die()
     {
         Debug.Log("Entity died.");
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 
     void Start()
