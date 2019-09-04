@@ -92,6 +92,36 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2771721124777865824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1487535018053892747}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1487535018053892747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2771721124777865824}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3959810824703102652}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3228184126045211009
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,9 +132,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3959810824703102652}
   - component: {fileID: 7682083520294236821}
-  - component: {fileID: 1791629198633049608}
   - component: {fileID: 3297597409642044596}
   - component: {fileID: 3204718518870194322}
+  - component: {fileID: 4266184134681880748}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Tower
@@ -125,6 +155,7 @@ Transform:
   m_Children:
   - {fileID: 8996981456860666622}
   - {fileID: 2143999045417950241}
+  - {fileID: 1487535018053892747}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -140,22 +171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6249b6dfb95da74a9ab481b008b4adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1791629198633049608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3228184126045211009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b50d87b5184332b43883fbf3546a2012, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackRange: 5
-  attackDelay: 1
-  attackEffect:
-  - {fileID: 11400000, guid: 097237186a7797f4fad50ad88ee18ed8, type: 2}
 --- !u!208 &3297597409642044596
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -186,6 +201,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetListByPriority:
   - Ennemy
+--- !u!114 &4266184134681880748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3228184126045211009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cbb6b5d70cc3f74e8c02f6ff0c7c4e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRange: 2
+  attackDelay: 1
+  spawnPoint: {fileID: 2771721124777865824}
+  bullet: {fileID: 3939328029991117941, guid: 8bfb4642a3ca5394396b144544a4f008, type: 3}
 --- !u!1 &6532624001065182975
 GameObject:
   m_ObjectHideFlags: 0

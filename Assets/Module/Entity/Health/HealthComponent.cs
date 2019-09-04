@@ -17,6 +17,12 @@ public class HealthComponent : MonoBehaviour
         activeModifier.Add(modifier);
     }
 
+    public void Reset()
+    {
+        current = max;
+        activeModifier.Clear();
+    }
+
     void Die()
     {
         Debug.Log("Entity died.");
@@ -25,7 +31,7 @@ public class HealthComponent : MonoBehaviour
 
     void Start()
     {
-        current = max;
+        Reset();
     }
 
     void Update()

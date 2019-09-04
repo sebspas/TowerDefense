@@ -5,10 +5,9 @@ using UnityEngine;
 public class AttackComponent : MonoBehaviour
 {
     public float attackRange = 2.0f;
-    public float attackDelay = 1.0f;
-    public List<IHealthModifier> attackEffect = new List<IHealthModifier>();
+    public float attackDelay = 1.0f;    
 
-    private GameObject _target;
+    protected GameObject _target;
 
     public GameObject Target
     {
@@ -23,22 +22,10 @@ public class AttackComponent : MonoBehaviour
         if (!target) return false;
 
         HealthComponent targetHealthComponent = target.GetComponent<HealthComponent>();     
-        return Vector3.Distance(target.transform.position - targetHealthComponent.attackOffset, transform.position) <= attackRange;
+        return Vector2.Distance(target.transform.position - targetHealthComponent.attackOffset, transform.position) <= attackRange;
     }
 
-    public void AttackTarget()
-    {
-        HealthComponent targetHealthComponent = _target.GetComponent<HealthComponent>();
-        if (!targetHealthComponent)
-        {
-            Debug.Log("Trying to attack a target without a healthComponent.");
-        }
-
-        foreach (var modifier in attackEffect)
-        {
-            targetHealthComponent.AddModifier(modifier);    
-        }
-    }
+    public virtual void AttackTarget() {}
 
     public void OnUpdate()
     {
@@ -51,6 +38,10 @@ public class AttackComponent : MonoBehaviour
                 AttackTarget();
                 _elapsedTime = 0.0f;
             }
+        }
+        else
+        {
+            _elapsedTime = 0.0f;
         }
     }
 }

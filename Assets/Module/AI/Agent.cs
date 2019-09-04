@@ -17,6 +17,11 @@ public class Agent : MonoBehaviour
     private EAgentState _currentAgentState = EAgentState.Idle;
     private Func<GameObject, GameObject, bool> findTargetCondition;
 
+    public void Reset()
+    {
+        _currentAgentState = EAgentState.Idle;
+    }
+
     private void Start()
     {
         _movementComponent = GetComponent<MovementComponent>();

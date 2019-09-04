@@ -7,6 +7,9 @@ TagManager:
   - Spawn
   - Wall
   - Ennemy
+  - Tower
+  - Pool
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -21,7 +24,7 @@ TagManager:
   - ForceField
   - Player
   - Terrain
-  - 
+  - Bullet
   - 
   - 
   - 

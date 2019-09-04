@@ -16,12 +16,6 @@ public class Spawner : MonoBehaviour
         Gizmos.DrawSphere(transform.position, 0.5f);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -30,7 +24,20 @@ public class Spawner : MonoBehaviour
         elapsedTime += Time.deltaTime;
         if (elapsedTime >= delay)
         {
-            Instantiate(spawnable[Random.Range(0, spawnable.Count)], transform.position, Quaternion.identity);
+            GameObject goTospawn = spawnable[Random.Range(0, spawnable.Count)];
+
+            GameObject newGO = PoolSystem.Instance.RequestGameObject(goTospawn.tag);
+
+            // Reset position
+            newGO.transform.position = transform.position;
+            newGO.transform.rotation = Quaternion.identity;
+
+            // Reset hp
+            newGO.GetComponent<HealthComponent>().Reset();
+
+            // Reset agent state
+            newGO.GetComponent<Agent>().Reset();
+
             elapsedTime = 0;
         }
     }

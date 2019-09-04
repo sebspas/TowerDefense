@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 8662477275228368973}
   - component: {fileID: 8662477275228368970}
   - component: {fileID: 7485075368277928672}
-  - component: {fileID: 8581257642511606753}
   - component: {fileID: 3632703892446356274}
+  - component: {fileID: 4254507967053143084}
   m_Layer: 0
   m_Name: Ennemy
   m_TagString: Ennemy
@@ -95,10 +95,10 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8662477275228368971}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.1, y: 1.1, z: 1.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8662477275228368975
 Rigidbody:
@@ -178,22 +178,6 @@ MonoBehaviour:
   max: 25
   current: 25
   attackOffset: {x: 3.5, y: 0, z: 0}
---- !u!114 &8581257642511606753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8662477275228368971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b50d87b5184332b43883fbf3546a2012, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackRange: 2
-  attackDelay: 1
-  attackEffect:
-  - {fileID: 11400000, guid: 23341dadab343144482693e09147063e, type: 2}
 --- !u!114 &3632703892446356274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +193,22 @@ MonoBehaviour:
   targetListByPriority:
   - Player
   - Wall
+--- !u!114 &4254507967053143084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662477275228368971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caed479addf7ead4db1e610ac63b72c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRange: 2
+  attackDelay: 1
+  attackEffect:
+  - {fileID: 11400000, guid: 23341dadab343144482693e09147063e, type: 2}
 --- !u!1001 &5934877564415293944
 PrefabInstance:
   m_ObjectHideFlags: 0
