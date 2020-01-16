@@ -7,26 +7,30 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    public HealthComponent healthComponent;
     public RectTransform progressBar;
     public TextMeshProUGUI valueDisplay;
+    public HealthComponent healthComponent;
 
     private float _defaultWidth;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!healthComponent)
-        {
-            Debug.LogError("No health component were set on the healthBar.");
-        }
+       
 
         _defaultWidth = progressBar.sizeDelta.x;
     }
 
+
     // Update is called once per frame
     void Update()
     {
+        // TODO: Change this so we do no access directly the player but a data structure
+        if (!healthComponent && GameManager.Instance.PlayerInstance)
+        {
+            healthComponent = GameManager.Instance.PlayerInstance.GetComponent<HealthComponent>();
+        }
+
         if (healthComponent)
         {
             float ratio = Mathf.Clamp(healthComponent.current / healthComponent.max, 0, 1);
