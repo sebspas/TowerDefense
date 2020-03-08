@@ -289,19 +289,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09a56a745f9724448bba4041c4696c47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkX: 100
-  chunkZ: 100
+  chunkX: 50
+  chunkZ: 50
   chunkOffset: 10
-  mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 3}
-  ground: {fileID: 1636527451945243408, guid: fe9c26682279cdb4ba127e2469670f94, type: 3}
-  water: {fileID: 8849599664630676832, guid: 73a3f90573c2d8949bbd755cb0496801, type: 3}
-  forest:
-  - {fileID: 3241804045579599631, guid: 5b7e100669ade41499f8c7346cddb629, type: 3}
-  mountains: {fileID: 545959598739523410, guid: 23eca70fea662f540ac6ee4b8c4bbbe0,
-    type: 3}
-  crystal: {fileID: 1046138468561484133, guid: 91f90a6044312b442828685204aa3335, type: 3}
-  NoiseScale: 10
-  Seed: 54865
+  spawnSize: 10
+  spawnAreaType: {fileID: 11400000, guid: 1f097e43a8cd9fb448738bc8971ce39b, type: 2}
+  debugType: {fileID: 11400000, guid: c8d507e6e66503c41ace31ab3fd8db9f, type: 2}
+  border: {fileID: 3241804045579599631, guid: e79243f97ee42cc41a7ed7f7a661840f, type: 3}
+  noiseScale: 8
+  seed: 464846
+  areaToGenerate:
+  - startValue: 0
+    endValue: 0.33
+    type: {fileID: 11400000, guid: f6a49e87c7f7c8d4b90eacbe1009d82a, type: 2}
+  - startValue: 0.33
+    endValue: 0.66
+    type: {fileID: 11400000, guid: 1f097e43a8cd9fb448738bc8971ce39b, type: 2}
+  - startValue: 0.66
+    endValue: 0.7
+    type: {fileID: 11400000, guid: 04adb52a338310c4e8edb7eb390c1801, type: 2}
+  - startValue: 0.7
+    endValue: 1
+    type: {fileID: 11400000, guid: 04adb52a338310c4e8edb7eb390c1801, type: 2}
 --- !u!4 &1472327007
 Transform:
   m_ObjectHideFlags: 0
