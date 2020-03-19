@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,11 +22,6 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Areas")]
     public List<MapArea> areaToGenerate;
 
-    // Internal map data
-    private Tile[,] _map;
-    private uint _mapSizeZ;
-    private uint _mapSizeX;
-
     class TileCluster
     {
         public TileCluster()
@@ -43,9 +36,9 @@ public class TerrainGenerator : MonoBehaviour
 
     public void GenerateTerrain()
     {
-        _mapSizeX = chunkX;
-        _mapSizeZ = chunkZ;
-        _map = new Tile[_mapSizeX, _mapSizeZ];
+        Map.Instance.MapSizeX = chunkX;
+        Map.Instance.MapSizeZ = chunkZ;
+        Map.Instance.MapTiles = new Tile[chunkX, chunkZ];
 
         // Generate a first map from raw perlin noise
         GeneratePerlinNoiseMap();
@@ -57,7 +50,7 @@ public class TerrainGenerator : MonoBehaviour
         LinkAllArea();
 
         // Place Map Border
-        PlaceMapBorder();
+        PlaceMapBorder(Map.Instance.MapSizeX, Map.Instance.MapSizeZ);
 
         // Add ressources and collectible on the map
         // TODO
@@ -68,29 +61,24 @@ public class TerrainGenerator : MonoBehaviour
         // Create one navmesh for the allMap
         // TODO change this to calculate the pathfinding myself using the map data
         CreateNavMesh(new Vector3((chunkX) / 10, 1, (chunkZ) / 10),
-            new Vector3(_mapSizeX / 2, 0.5f, _mapSizeX / 2),
+            new Vector3(Map.Instance.MapSizeX / 2, 0.5f, Map.Instance.MapSizeX / 2),
             new Vector3(0, 0, 0));
     }
 
-    private void PlaceMapBorder()
+    private void PlaceMapBorder(float sizeX, float sizeZ)
     {
         // left 
-        var wall = Instantiate(border, new Vector3(-1, 0, (float)(_mapSizeZ-1)/ 2), Quaternion.identity);
-        wall.transform.localScale = new Vector3(1,1, _mapSizeZ);
+        var wall = Instantiate(border, new Vector3(-1, 0, (float)(sizeZ - 1)/ 2), Quaternion.identity);
+        wall.transform.localScale = new Vector3(1,1, sizeZ);
         // top
-        wall = Instantiate(border, new Vector3((float)(_mapSizeX - 1) / 2, 0, _mapSizeZ), Quaternion.identity);
-        wall.transform.localScale = new Vector3(_mapSizeX,1, 1);
+        wall = Instantiate(border, new Vector3((float)(sizeX - 1) / 2, 0, sizeZ), Quaternion.identity);
+        wall.transform.localScale = new Vector3(sizeX, 1, 1);
         // right
-        wall = Instantiate(border, new Vector3(_mapSizeX, 0, (float)(_mapSizeZ - 1) / 2), Quaternion.identity);
-        wall.transform.localScale = new Vector3(1,1, _mapSizeZ);
+        wall = Instantiate(border, new Vector3(sizeX, 0, (float)(sizeZ - 1) / 2), Quaternion.identity);
+        wall.transform.localScale = new Vector3(1,1, sizeZ);
         // bot
-        wall = Instantiate(border, new Vector3((float)(_mapSizeX - 1) / 2, 0, -1), Quaternion.identity);
-        wall.transform.localScale = new Vector3(_mapSizeX, 1, 1);
-    }
-
-    public Vector3 GetMapCenter()
-    {
-        return new Vector3(chunkX/2, 0, chunkZ/2);
+        wall = Instantiate(border, new Vector3((float)(sizeX - 1) / 2, 0, -1), Quaternion.identity);
+        wall.transform.localScale = new Vector3(sizeX, 1, 1);
     }
 
     private MapArea GetMapAreaFromPerlinNoise(float perlinValue)
@@ -112,7 +100,7 @@ public class TerrainGenerator : MonoBehaviour
     /// </summary>
     private void CreateCenterSpawn()
     {
-        var centerPos = GetMapCenter();
+        var centerPos = Map.Instance.GetMapCenter();
 
         var minX = (uint)centerPos.x - (spawnSize / 2);
         var minZ = (uint)centerPos.z - (spawnSize / 2);
@@ -121,7 +109,7 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (var z = minZ; z < (uint)centerPos.z + (spawnSize / 2); z++)
             {
-                _map[x, z].type = spawnAreaType;
+                Map.Instance.MapTiles[x, z].type = spawnAreaType;
             }
         }
     }
@@ -130,18 +118,18 @@ public class TerrainGenerator : MonoBehaviour
     {
         Debug.Log("Start Map Generation");
 
-        for (int x = 0; x < _mapSizeX; x++)
+        for (int x = 0; x < Map.Instance.MapSizeX; x++)
         {
-            for (int z = 0; z < _mapSizeZ; z++)
+            for (int z = 0; z < Map.Instance.MapSizeZ; z++)
             {
                 //Terrain algorithm
                 var perlinNoise = Mathf.Abs(Mathf.PerlinNoise(
-                    ((float)x / _mapSizeZ * noiseScale) + seed,
-                    ((float)z / _mapSizeX * noiseScale) + seed));
+                    ((float)x / Map.Instance.MapSizeZ * noiseScale) + seed,
+                    ((float)z / Map.Instance.MapSizeX * noiseScale) + seed));
 
                 var areaToSpawn = GetMapAreaFromPerlinNoise(perlinNoise);
 
-                _map[x,z] = new Tile(x, z, areaToSpawn.type);
+                Map.Instance.MapTiles[x,z] = new Tile(x, z, areaToSpawn.type);
             }
         }
 
@@ -150,11 +138,11 @@ public class TerrainGenerator : MonoBehaviour
 
     private void InstantiateMapGameObject()
     {
-        for (var x = 0; x < _mapSizeX; x++)
+        for (var x = 0; x < Map.Instance.MapSizeX; x++)
         {
-            for (var z = 0; z < _mapSizeZ; z++)
+            for (var z = 0; z < Map.Instance.MapSizeZ; z++)
             {
-                var tile = _map[x, z];
+                var tile = Map.Instance.MapTiles[x, z];
                 var pos = new Vector3(x, 0, z);                
                 var newBlock = Instantiate(tile.type.prefab, pos, Quaternion.identity);
                 newBlock.transform.parent = transform;
@@ -181,16 +169,16 @@ public class TerrainGenerator : MonoBehaviour
 
     private void LinkAllArea()
     {
-        List<TileCluster> listOfCluster = new List<TileCluster>();
+        var listOfCluster = new List<TileCluster>();
 
         // First pass on the map to find floor tile
-        for (var x = 0; x < _mapSizeX; x++)
+        for (var x = 0; x < Map.Instance.MapSizeX; x++)
         {
-            for (var z = 0; z < _mapSizeZ; z++)
+            for (var z = 0; z < Map.Instance.MapSizeZ; z++)
             {
-                var tile = _map[x, z];
+                var tile = Map.Instance.MapTiles[x, z];
                 // When we find one expand it to create a cluster if not already inside one
-                if (tile.type.IsWalkable)
+                if (tile.type.isWalkable)
                 {
                     var found = false;
                     foreach (var cluster in listOfCluster)
@@ -204,10 +192,9 @@ public class TerrainGenerator : MonoBehaviour
                     if (!found)
                     {
                         // Create a new cluster from this tile
-                        TileCluster newCluster = CreateNewClusterFromTile(tile);
+                        var newCluster = CreateNewClusterFromTile(tile);
                         UpdateClusterBorder(newCluster);
                         listOfCluster.Add(newCluster);
-
                     }
                 }
             }
@@ -237,7 +224,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         foreach (var neighbor in GetNeighbors(tile))
         {
-            if (!neighbor.type.IsWalkable)
+            if (!neighbor.type.isWalkable)
             {
                 return true;
             }
@@ -261,7 +248,7 @@ public class TerrainGenerator : MonoBehaviour
             var current = toExplore.Dequeue();
             foreach (var neighbor in GetNeighbors(current))
             {
-                if (neighbor.type.IsWalkable && !visitedTiles.Contains(neighbor))
+                if (neighbor.type.isWalkable && !visitedTiles.Contains(neighbor))
                 {
                     visitedTiles.Add(neighbor);
                     newCluster.tiles.Add(neighbor);
@@ -280,22 +267,22 @@ public class TerrainGenerator : MonoBehaviour
         // Left
         if (tile.x - 1 >= 0)
         {
-            neighbors.Add(_map[tile.x - 1, tile.z]);
+            neighbors.Add(Map.Instance.MapTiles[tile.x - 1, tile.z]);
         }
         // Right
-        if (tile.x + 1 < _mapSizeX)
+        if (tile.x + 1 < Map.Instance.MapSizeX)
         {
-            neighbors.Add(_map[tile.x + 1, tile.z]);
+            neighbors.Add(Map.Instance.MapTiles[tile.x + 1, tile.z]);
         }
         // UP
-        if (tile.z + 1 < _mapSizeZ)
+        if (tile.z + 1 < Map.Instance.MapSizeZ)
         {
-            neighbors.Add(_map[tile.x, tile.z + 1]);
+            neighbors.Add(Map.Instance.MapTiles[tile.x, tile.z + 1]);
         }
         // DOWN
         if (tile.z - 1 >= 0)
         {
-            neighbors.Add(_map[tile.x, tile.z - 1]);
+            neighbors.Add(Map.Instance.MapTiles[tile.x, tile.z - 1]);
         }
 
         return neighbors;
@@ -363,7 +350,7 @@ public class TerrainGenerator : MonoBehaviour
                 currentX++;
             }
 
-            _map[currentX, currentZ].type = debugType;
+            Map.Instance.MapTiles[currentX, currentZ].type = debugType;
         }
 
         while (currentZ != dest.z)
@@ -377,7 +364,7 @@ public class TerrainGenerator : MonoBehaviour
                 currentZ++;
             }
 
-            _map[currentX, currentZ].type = debugType;
+            Map.Instance.MapTiles[currentX, currentZ].type = debugType;
         }
     }
 }

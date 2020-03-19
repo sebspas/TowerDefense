@@ -1,39 +1,34 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {    
     public GameObject playerPrefab;
 
-    GameObject playerInstance;
+    public GameObject PlayerInstance { get; set; }
 
-    public GameObject PlayerInstance { get => playerInstance; set => playerInstance = value; }
-
-    private static GameManager _instance;
-
-    public static GameManager Instance { get { return _instance; } }
+    public static GameManager Instance { get; private set; }
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
         }
         else
         {
-            _instance = this;
+            Instance = this;
         }
     }
 
     void Start()
     {
-        TerrainGenerator terrainGenerator = GameObject.FindObjectOfType<TerrainGenerator>();
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        var terrainGenerator = GameObject.FindObjectOfType<TerrainGenerator>();
+        var player = GameObject.FindGameObjectWithTag("Player");
 
         // Generate Terrain
         terrainGenerator.GenerateTerrain();
 
         // Create Player
-        PlayerInstance = Instantiate(playerPrefab, terrainGenerator.GetMapCenter(), Quaternion.identity);
+        PlayerInstance = Instantiate(playerPrefab, Map.Instance.GetMapCenter(), Quaternion.identity);
     }
 }

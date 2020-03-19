@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileName: Floor
   prefab: {fileID: 1636527451945243408, guid: fe9c26682279cdb4ba127e2469670f94, type: 3}
-  IsWalkable: 1
+  isWalkable: 1
