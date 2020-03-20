@@ -222,7 +222,7 @@ public class TerrainGenerator : MonoBehaviour
 
     private bool IsBorder(Tile tile)
     {
-        foreach (var neighbor in GetNeighbors(tile))
+        foreach (var neighbor in Map.Instance.GetNeighbors(tile))
         {
             if (!neighbor.type.isWalkable)
             {
@@ -246,7 +246,7 @@ public class TerrainGenerator : MonoBehaviour
         while (toExplore.Count > 0)
         {
             var current = toExplore.Dequeue();
-            foreach (var neighbor in GetNeighbors(current))
+            foreach (var neighbor in Map.Instance.GetNeighbors(current))
             {
                 if (neighbor.type.isWalkable && !visitedTiles.Contains(neighbor))
                 {
@@ -258,34 +258,6 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         return newCluster;
-    }
-
-    private IEnumerable<Tile> GetNeighbors(Tile tile)
-    {
-        var neighbors = new List<Tile>();
-
-        // Left
-        if (tile.x - 1 >= 0)
-        {
-            neighbors.Add(Map.Instance.MapTiles[tile.x - 1, tile.z]);
-        }
-        // Right
-        if (tile.x + 1 < Map.Instance.MapSizeX)
-        {
-            neighbors.Add(Map.Instance.MapTiles[tile.x + 1, tile.z]);
-        }
-        // UP
-        if (tile.z + 1 < Map.Instance.MapSizeZ)
-        {
-            neighbors.Add(Map.Instance.MapTiles[tile.x, tile.z + 1]);
-        }
-        // DOWN
-        if (tile.z - 1 >= 0)
-        {
-            neighbors.Add(Map.Instance.MapTiles[tile.x, tile.z - 1]);
-        }
-
-        return neighbors;
     }
 
     private void MergeTwoClosestCluster(IList<TileCluster> clusterList)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Map
@@ -56,8 +57,8 @@ public class Map
 
     public Tile GetTileUnderposition(Vector3 positiontarget)
     {
-        uint x = (uint)Math.Floor(positiontarget.x);
-        uint z = (uint)Math.Floor(positiontarget.z);
+        var x = (uint)Math.Floor(positiontarget.x);
+        var z = (uint)Math.Floor(positiontarget.z);
 
         if (x > MapSizeX || z > MapSizeZ)
         {
@@ -69,15 +70,36 @@ public class Map
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public IEnumerable<Tile> GetNeighbors(Tile tile)
     {
-        
+        var neighbors = new List<Tile>();
+
+        // Left
+        if (tile.x - 1 >= 0)
+        {
+            neighbors.Add(_mapTiles[tile.x - 1, tile.z]);
+        }
+        // Right
+        if (tile.x + 1 < Map.Instance.MapSizeX)
+        {
+            neighbors.Add(_mapTiles[tile.x + 1, tile.z]);
+        }
+        // UP
+        if (tile.z + 1 < Map.Instance.MapSizeZ)
+        {
+            neighbors.Add(_mapTiles[tile.x, tile.z + 1]);
+        }
+        // DOWN
+        if (tile.z - 1 >= 0)
+        {
+            neighbors.Add(_mapTiles[tile.x, tile.z - 1]);
+        }
+
+        return neighbors;
     }
 
-    // Update is called once per frame
-    void Update()
+    public static Vector2 Get2DPos(Vector3 position)
     {
-        
+        return new Vector2(position.x, position.z);
     }
 }

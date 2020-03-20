@@ -23,18 +23,17 @@ public class Tower : MonoBehaviour
 
         findTargetCondition = (newCandidate, selectedTarget) =>
         {
-            var newDistance = Vector3.Distance(newCandidate.transform.position, transform.position);
+            Vector2 transformPos = Map.Get2DPos(transform.position);
+            Vector2 candidatePosition = Map.Get2DPos(newCandidate.transform.position);
+
+            var newDistance = Vector2.Distance(candidatePosition, transformPos);
             var selectedDistance = float.MaxValue;
             if (selectedTarget)
             {
-                selectedDistance = Vector3.Distance(selectedTarget.transform.position, transform.position);
+                selectedDistance = Vector3.Distance(Map.Get2DPos(selectedTarget.transform.position), transformPos);
             }
-            
-            if (newDistance <= _attackComponent.attackRange && newDistance <= selectedDistance)
-            {
-                return true;
-            }
-            return false;
+
+            return _attackComponent.IsTargetInRange(newCandidate) && newDistance <= selectedDistance;
         };
     }
 

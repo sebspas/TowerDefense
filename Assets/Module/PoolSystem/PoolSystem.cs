@@ -52,7 +52,7 @@ public class PoolSystem : MonoBehaviour
 
         if (!gameObjectReturned)
         {
-            bool foundGO = false;
+            var foundGO = false;
             foreach (var item in poolItems)
             {
                 if (item.objectToPool.tag == tag)
@@ -76,9 +76,6 @@ public class PoolSystem : MonoBehaviour
         }
         else
         {
-            // Re-able the game object
-            gameObjectReturned.SetActive(true);
-
             // Remove it from the pool
             _poolOfGameObjects.Remove(gameObjectReturned);
         }

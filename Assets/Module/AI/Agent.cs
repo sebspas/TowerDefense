@@ -30,16 +30,19 @@ public class Agent : MonoBehaviour
 
         findTargetCondition = (newCandidate, selectedTarget) =>
         {
-            var newDistance = Vector3.Distance(newCandidate.transform.position, transform.position);
+            var transformPos = Map.Get2DPos(transform.position);
+            var candidatePosition = Map.Get2DPos(newCandidate.transform.position);
+
+            var newDistance = Vector2.Distance(candidatePosition, transformPos);
             var selectedDistance = float.MaxValue;
             if (selectedTarget)
             {
-                selectedDistance = Vector3.Distance(selectedTarget.transform.position, transform.position);
+                selectedDistance = Vector2.Distance(Map.Get2DPos(selectedTarget.transform.position), transformPos);
             }
 
             if (newDistance <= selectedDistance && newDistance <= _movementComponent.DistanceToCurrentTarget)
             {
-                if (_movementComponent.CanNavigateTo(newCandidate.transform.position))
+                if (_movementComponent.TryToGetNavigablePositionFromTarget(newCandidate, out var pos))
                 {
                     return true;
                 }

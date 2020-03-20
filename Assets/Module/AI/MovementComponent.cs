@@ -16,12 +16,44 @@ public class MovementComponent : MonoBehaviour
     public void SetDestination(GameObject target)
     {
         _target = target;
-        HealthComponent targetHealthComponent = target.GetComponent<HealthComponent>();
+        var targetHealthComponent = target.GetComponent<HealthComponent>();
 
-        Vector3 destination = target.transform.position - targetHealthComponent.attackOffset;
-        _navMeshAgent.SetDestination(destination);
-        _distanceToCurrentTarget = Vector3.Distance(transform.position, destination);
-        _navMeshAgent.isStopped = false;
+        if (TryToGetNavigablePositionFromTarget(target, out var targetPos))
+        {
+            var destination = targetPos - targetHealthComponent.attackOffset;
+            _navMeshAgent.SetDestination(destination);
+            _distanceToCurrentTarget = Vector3.Distance(transform.position, destination);
+            _navMeshAgent.isStopped = false;
+        }
+        else
+        {
+            Debug.Log("Cannot navigate to target...");
+        }
+    }
+
+    public bool TryToGetNavigablePositionFromTarget(GameObject target, out Vector3 outPosition)
+    {
+        if (CanNavigateTo(target.transform.position))
+        {
+            outPosition = target.transform.position;
+            return true;
+        }
+
+        // Try neighboor tile to see if one is navigable
+        var newCandidateTile = Map.Instance.GetTileUnderposition(target.transform.position);
+        var neighBors = Map.Instance.GetNeighbors(newCandidateTile);
+
+        foreach (var tile in neighBors)
+        {
+            if (CanNavigateTo(tile.Get3DPosition()))
+            {
+                outPosition = target.transform.position;
+                return true;
+            }
+        }
+
+        outPosition = new Vector3();
+        return false;
     }
 
     public bool CanNavigateTo(Vector3 position)

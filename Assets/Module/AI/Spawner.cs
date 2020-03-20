@@ -24,9 +24,9 @@ public class Spawner : MonoBehaviour
         elapsedTime += Time.deltaTime;
         if (elapsedTime >= delay)
         {
-            GameObject goTospawn = spawnable[Random.Range(0, spawnable.Count)];
+            var goTospawn = spawnable[Random.Range(0, spawnable.Count)];
 
-            GameObject newGO = PoolSystem.Instance.RequestGameObject(goTospawn.tag);
+            var newGO = PoolSystem.Instance.RequestGameObject(goTospawn.tag);
 
             // Reset position
             newGO.transform.position = transform.position;
@@ -37,6 +37,9 @@ public class Spawner : MonoBehaviour
 
             // Reset agent state
             newGO.GetComponent<Agent>().Reset();
+
+            // Re-able the game object
+            newGO.SetActive(true);
 
             elapsedTime = 0;
         }

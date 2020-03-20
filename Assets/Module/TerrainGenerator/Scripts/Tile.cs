@@ -18,6 +18,16 @@ public class Tile
         this.type = type;
     }
 
+    public Vector2 GetPosition()
+    {
+        return new Vector2(x, z);
+    }
+
+    public Vector3 Get3DPosition()
+    {
+        return new Vector3(x, 0.0f, z);
+    }
+
     public override string ToString()
     {
         return "[x:" + x + ";" + "z:" + z + "]";
