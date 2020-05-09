@@ -11,24 +11,33 @@ public class CameraFollow : MonoBehaviour
 
     private Transform mainCamera;
     private Transform player;
-    
-    void Start()
+
+    private void Start()
     {
         mainCamera = GetComponent<Transform>();
 
+        TryAttachToPlayer();
+    }
+
+    private void TryAttachToPlayer()
+    {
         var playerGO = GameObject.FindGameObjectWithTag("Player");
 
         if (playerGO)
         {
             player = playerGO.GetComponent<Transform>();
         }
-
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (!mainCamera || !player) return;
+        if (!mainCamera) return;
+
+        if (!player)
+        {
+            TryAttachToPlayer();
+        }
 
         var lerpValue = Time.deltaTime * speed;
         mainCamera.position = Vector3.Lerp(mainCamera.position, 
